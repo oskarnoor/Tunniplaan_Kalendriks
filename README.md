@@ -8,13 +8,14 @@ See projekt on loodud kooli tunniplaani automaatseks kogumiseks ja selle lisamis
    ```bash
    pip install -r requirements.txt
    ```
-2. Seadista Google Cloud Console'is uus projekt ja laadi alla `credentials.json` fail.
+2. Seadista Google Calendar API (vt [Google'i kalendri API seadistamine](#googlei-kalendri-api-seadistamine) allpool).
 3. Lisa `credentials.json` projekti juurkausta.
-4. Muuda failis `config.py` oma kooli andmeid (vaata allpool).
+4. Muuda failis `config.py` oma kooli andmeid.
 5. Kaivita programm:
    ```bash
    python main.py
    ```
+   *Esmakordsel käivitamisel pead andma rakendusele loa oma kalendrit kasutada.*
 
 ## Seadistamine
 
@@ -49,6 +50,32 @@ SHOW_LESSONS = {
 - `SELECTED_GROUPS`: Kui tunnid on jagatud ruhmadesse (nt IK1, IK2), maarake oma ruhm.
 - `SELECTED_TEACHERS`: Kui tunnil on mitu opetajat, maarake oma opetaja nimi.
 
+## Google'i kalendri API seadistamine
+
+Selle skripti kasutamiseks pead seadistama Google Cloudi projekti ja lubama kalendri API:
+
+1. **Loo projekt:**
+   - Mine [Google Cloud Console](https://console.cloud.google.com/) lehele.
+   - Loo uus projekt (nupp "New Project").
+2. **Luba API:**
+   - Navigeeri **APIs & Services > Library**.
+   - Otsi "Google Calendar API" ja klõpsa **Enable**.
+3. **Seadista OAuth nõusoleku ekraan (Consent Screen):**
+   - Vali **APIs & Services > OAuth consent screen**.
+   - Vali tüübiks **External** ja vajuta **Create**.
+   - Täida kohustuslikud väljad (App name, Support email, Developer email).
+   - Jätka kuni sektsioonini **Test users** ja lisa sinna oma Google'i e-posti aadress. See on kriitiline samm!
+4. **Loo mandaadid (Credentials):**
+   - Vali **APIs & Services > Credentials**.
+   - Klõpsa **Create Credentials > OAuth client ID**.
+   - Vali rakenduse tüübiks **Desktop app**.
+   - Pärast loomist laadi alla JSON-fail.
+5. **Faili ettevalmistamine:**
+   - Nimeta laaditud fail ümber: `credentials.json`.
+   - Aseta see fail sellesse samasse kausta, kus asub `main.py`.
+
+Pärast neid samme loo programmiga esimene ühendus: `python main.py`. Avaneb brauseriaken, kus pead sisse logima ja lubama ligipääsu. Seejärel tekkib automaatselt `token.json` fail.
+
 ## Avaldamine GitHubis
 
 Kui soovid projekti GitHubis jagada, kasuta abiskripti:
@@ -65,17 +92,18 @@ This project is designed to automatically collect school lesson schedules and ad
 
 ## Usage
 
-1. Install the required libraries using:
+1. Install the required libraries:
    ```bash
    pip install -r requirements.txt
    ```
-2. Set up a new project in the Google Cloud Console and download the `credentials.json` file.
+2. Set up Google Calendar API (see [Google Calendar API Setup](#google-calendar-api-setup) below).
 3. Place the `credentials.json` file in the project's root directory.
-4. Edit your school's details in `config.py` (see below).
-5. Run the program using:
+4. Edit your school's details in `config.py`.
+5. Run the program:
    ```bash
    python main.py
    ```
+   *On the first run, you will be prompted to authorize the application in your browser.*
 
 ## Configuration
 
@@ -109,6 +137,33 @@ SHOW_LESSONS = {
 ### Groups and Teachers
 - `SELECTED_GROUPS`: If lessons are divided into groups (like IK1, IK2), set your group number.
 - `SELECTED_TEACHERS`: If a lesson has multiple teachers, set a part of your teacher's name.
+
+## Google Calendar API Setup
+
+To use this script, you need to set up a Google Cloud Project and enable the Calendar API:
+
+1. **Create a Project:**
+   - Go to the [Google Cloud Console](https://console.cloud.google.com/).
+   - Create a new project (e.g., "School Calendar Sync").
+2. **Enable the API:**
+   - Navigate to **APIs & Services > Library**.
+   - Search for "Google Calendar API" and click **Enable**.
+3. **Configure OAuth Consent Screen:**
+   - Go to **APIs & Services > OAuth consent screen**.
+   - Choose **External** user type and click **Create**.
+   - Fill in the required fields (App name, user support email, developer contact info).
+   - In the **Test users** section, add your own Google email address. This is required for the authorization to work in testing mode.
+4. **Create Credentials:**
+   - Go to **APIs & Services > Credentials**.
+   - Click **Create Credentials > OAuth client ID**.
+   - Select **Desktop app** as the Application type.
+   - Name it (e.g., "My Desktop Client") and click **Create**.
+5. **Download and Rename:**
+   - Download the JSON file for your new OAuth client.
+   - Rename the downloaded file to `credentials.json` and place it in the root directory of this project.
+
+### Authorization (token.json)
+The first time you run `python main.py`, a browser window will open asking you to log in to your Google account. After you grant permission, a `token.json` file will be created automatically in your project folder. This file stores your access credentials for future runs.
 
 ## Removing Events
 
